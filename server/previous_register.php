@@ -1,9 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Allow requests from your React frontend
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-session_start();
+header('Access-Control-Allow-Origin: *');
 
 $conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
 
@@ -16,13 +12,7 @@ if (mysqli_connect_error()) {
     $mobile = isset($_POST['mobile']) ? $_POST['mobile'] : '';
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
 
-    // // Verify CSRF token
-    // if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
-    //     exit('CSRF protection triggered');
-    // }
-    $_SESSION['CSRF_TOKEN'] = $csrf_token;
     // Proceed with your SQL query only if all keys are present
     if ($name && $mobile && $email && $password) {
         // Hash the password before storing it
@@ -33,14 +23,9 @@ if (mysqli_connect_error()) {
 
         if ($res) {
             echo "Success!";
-            // if (isset($_SESSION['CSRF_TOKEN'])) {
-            //     header("Location: /home");
-            //     exit();
-            // }
         } else {
             echo "Error!";
         }
-
     } else {
         echo "Missing required fields!";
     }
