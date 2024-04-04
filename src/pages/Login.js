@@ -19,7 +19,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col px-52 mt-6 h-screen">
+    <div className="flex flex-col px-3 md:px-52 mt-6 h-screen">
       <h1 className="text-3xl font-normal mb-4">Login</h1>
       <form>
         <div className="mb-4">

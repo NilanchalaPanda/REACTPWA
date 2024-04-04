@@ -58,7 +58,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col px-52 mt-6 h-screen">
+    <div className="flex flex-col px-4 md:px-52 mt-6 h-screen">
       <h1 className="text-3xl font-normal mb-4">Register</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

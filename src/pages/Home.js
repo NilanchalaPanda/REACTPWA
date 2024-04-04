@@ -4,7 +4,7 @@ const AddUser = () => {
   return (
     <>
       <Navbar />
-      <h1 className="px-20 pt-16 text-4xl font-bold">Welcome Nilanchal</h1>
+      <h1 className="pt-10 px-2 text-2xl md:px-20 md:pt-16 md:text-4xl font-bold">Welcome Nilanchal</h1>
     </>
   );
 };
