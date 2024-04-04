@@ -39,7 +39,7 @@ const Register = () => {
         console.log("Please enter all fields");
       }
 
-      const url = "http://localhost/my-pwa/server/register.php";
+      const url = "http://localhost/REACTPWA/server/register.php";
       let fData = new FormData();
       console.log("Form Data - ", fData);
       fData.append("name", name);
@@ -111,8 +111,7 @@ const Register = () => {
         </div>
         <div className="flex space-x-4 items-end">
           <button
-            type="button"
-            // onClick={handleRegister}
+            type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             REGISTER
