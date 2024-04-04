@@ -1,7 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Allow requests from your React frontend
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Origin: *');
 
 session_start();
 
@@ -33,14 +31,9 @@ if (mysqli_connect_error()) {
 
         if ($res) {
             echo "Success!";
-            // if (isset($_SESSION['CSRF_TOKEN'])) {
-            //     header("Location: /home");
-            //     exit();
-            // }
         } else {
             echo "Error!";
         }
-
     } else {
         echo "Missing required fields!";
     }

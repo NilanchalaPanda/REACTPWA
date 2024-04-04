@@ -193,10 +193,7 @@ const Register = () => {
 
       axios
         .post(url, formData)
-        .then((response) => {
-          alert(response.data);
-          window.location.href = "/home"; // Redirect to home page
-        })
+        .then((response) => alert(response.data))
         .catch((error) => alert(error));
 
       alert("Successfully registered");
