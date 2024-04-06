@@ -9,6 +9,11 @@ const Navbar = () => {
     setNav((prev) => !prev);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
+
   const navItems = [
     { id: 1, text: "Home", to: "/home" },
     { id: 2, text: "Add New User", to: "/add_user" },
@@ -33,6 +38,7 @@ const Navbar = () => {
         ))}
         <NavLink
           to="/login"
+          onClick={handleLogout}
           className={
             "px-4 py-2 bg-blue-500 rounded-xl m-2 cursor-pointer duration-300 font-semibold"
           }

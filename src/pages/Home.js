@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -28,16 +29,18 @@ const Home = () => {
   console.log("UserData:", userData);
 
   return (
-    <div className="px-3 md:px-52 mt-6 h-screen">
-      <h1 className="text-3xl font-normal mb-4">Home</h1>
+    <>
+      <Navbar />
       {userData && (
         <div>
-          <p>Name: {userData.name}</p>
+          <h1 className="pt-10 px-2 text-2xl md:px-20 md:pt-16 md:text-4xl font-bold">
+            Welcome {userData.name}
+          </h1>
           <p>Email: {userData.email}</p>
           <p>Mobile: {userData.mobile}</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
