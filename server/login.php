@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST");
 
 session_start();
 // Log received data
-file_put_contents('received_data.log', print_r($_POST, true));
+// file_put_contents('received_data.log', print_r($_POST, true));
 require_once('../vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
