@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
-$conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
+require_once 'db_connection.php';
 
 if (mysqli_connect_error()) {
     echo mysqli_connect_error();

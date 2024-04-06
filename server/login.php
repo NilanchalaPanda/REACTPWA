@@ -9,7 +9,7 @@ file_put_contents('received_data.log', print_r($_POST, true));
 require_once('../vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
-$conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
+require_once 'db_connection.php';
 
 if (mysqli_connect_error()) {
     echo mysqli_connect_error();

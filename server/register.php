@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 
 session_start();
 
-$conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
+$conn = new mysqli("localhost", "root", "Nil@_2003", "pwa_project");
 
 if (mysqli_connect_error()) {
     echo mysqli_connect_error();

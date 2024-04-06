@@ -6,24 +6,31 @@ const Home = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Retrieve token from local storage
-    const token = localStorage.getItem("token");
-    console.log("Token:", token);
+    const fetchData = async () => {
+      try {
+        // Retrieve token from local storage
+        const token = localStorage.getItem("token");
+        console.log("Token:", token);
 
-    // Make request to server to get user data
-    axios
-      .get("http://localhost/REACTPWA/server/user_data.php", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+        // Make request to server to get user data
+        const response = await axios.get(
+          "http://localhost/REACTPWA/server/user_data.php",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        
         console.log("Response:", response);
         setUserData(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching user data: ", error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   console.log("UserData:", userData);

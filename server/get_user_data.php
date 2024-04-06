@@ -18,7 +18,7 @@ try {
     $user_id = $decoded->user_id;
 
     // Your database query to fetch user data based on the user ID
-    $conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
+    require_once 'db_connection.php';
     $sql = "SELECT * FROM users WHERE id = '$user_id'";
     $result = $conn->query($sql);
 
