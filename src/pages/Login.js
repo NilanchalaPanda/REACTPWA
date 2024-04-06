@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,6 +27,7 @@ const Login = () => {
       })
       .then((response) => {
         console.log(response);
+        toast.success("Logged In");
         const token = response.data.token;
         // Store token in local storage
         localStorage.setItem("token", token);
