@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,9 +14,27 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    // Perform login logic here, such as sending data to a server
-    console.log("Email:", email);
-    console.log("Password:", password);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    axios
+      .post("http://localhost/REACTPWA/server/login.php", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        const token = response.data.token;
+        // Store token in local storage
+        localStorage.setItem("token", token);
+        // Redirect to home page
+        window.location.href = "/home";
+      })
+      .catch((error) => {
+        console.error("Login error: ", error);
+      });
   };
 
   return (
@@ -28,7 +47,7 @@ const Login = () => {
           </label>
           <input
             type="email"
-            id="email"
+            name="email" // Ensure the name attribute is "email"
             value={email}
             onChange={handleEmailChange}
             className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
@@ -40,7 +59,7 @@ const Login = () => {
           </label>
           <input
             type="password"
-            id="password"
+            name="password" // Ensure the name attribute is "password"
             value={password}
             onChange={handlePasswordChange}
             className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
