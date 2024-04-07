@@ -89,7 +89,8 @@ const AddUser = () => {
               id="name"
               value={name}
               onChange={handleNameChange}
-              className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
+              // className="form-input mt-1 active:border-blue-500 focus:border-red-600 block w-full h-10 rounded-md border-2"
+              className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
             />
           </div>
           <div className="mb-4">
@@ -101,7 +102,7 @@ const AddUser = () => {
               id="email"
               value={email}
               onChange={handleEmailChange}
-              className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
+              className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
             />
           </div>
           <div className="mb-4">
@@ -113,7 +114,7 @@ const AddUser = () => {
               id="mobile"
               value={mobile}
               onChange={handleMobileChange}
-              className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
+              className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
             />
           </div>
           <div className="mb-4">
@@ -125,7 +126,7 @@ const AddUser = () => {
               id="password"
               value={password}
               onChange={handlePasswordChange}
-              className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
+              className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
             />
           </div>
           <button
