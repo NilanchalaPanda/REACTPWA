@@ -27,9 +27,11 @@ const Login = () => {
       })
       .then((response) => {
         console.log(response);
+        const { csrf_token, token } = response.data;
         toast.success("Logged In");
-        const token = response.data.token;
-        // Store token in local storage
+        // Store CSRF token in local storage
+        localStorage.setItem("csrfToken", csrf_token);
+        // Store JWT token in local storage
         localStorage.setItem("token", token);
         // Redirect to home page
         window.location.href = "/home";
@@ -49,7 +51,7 @@ const Login = () => {
           </label>
           <input
             type="email"
-            name="email" // Ensure the name attribute is "email"
+            name="email"
             value={email}
             onChange={handleEmailChange}
             className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"
@@ -61,7 +63,7 @@ const Login = () => {
           </label>
           <input
             type="password"
-            name="password" // Ensure the name attribute is "password"
+            name="password"
             value={password}
             onChange={handlePasswordChange}
             className="form-input mt-1 block w-full h-10 rounded-md border-gray-300 border-2"

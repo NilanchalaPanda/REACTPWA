@@ -1,11 +1,9 @@
 <?php
+session_start();
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 
-session_start();
-// Log received data
-// file_put_contents('received_data.log', print_r($_POST, true));
 require_once('../vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
@@ -30,8 +28,14 @@ if (mysqli_connect_error()) {
             if (password_verify($password, $user['password'])) {
                 // Password is correct, generate JWT token
                 $token = generateJWT($user['id']); // Assuming 'id' is the unique identifier for the user
-                echo json_encode(array("token" => $token));
-                exit(); // Exit script after sending token
+
+                // Generate CSRF token
+                $csrfToken = bin2hex(random_bytes(32)); // Generate a random CSRF token
+                $_SESSION['csrf_token'] = $csrfToken;
+
+                // Send CSRF token and JWT token in response
+                echo json_encode(array("csrf_token" => $csrfToken, "token" => $token));
+                exit(); // Exit script after sending tokens
             } else {
                 echo "Incorrect password";
             }
@@ -57,5 +61,4 @@ function generateJWT($userId) {
     );
     return JWT::encode($payload, $secretKey, 'HS256'); // Include algorithm 'HS256'
 }
-
 ?>

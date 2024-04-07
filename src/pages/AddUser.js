@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -8,6 +8,21 @@ const AddUser = () => {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [csrfToken, setCsrfToken] = useState(""); // Define csrfToken state
+
+  // useEffect(() => {
+  //   const fetchCsrfToken = async () => {
+  //     try {
+  //       // Retrieve CSRF token from local storage
+  //       const storedCsrfToken = localStorage.getItem("csrfToken");
+  //       setCsrfToken(storedCsrfToken);
+  //       console.log(storedCsrfToken);
+  //     } catch (error) {
+  //       console.error("Error fetching CSRF token:", error);
+  //     }
+  //   };
+  //   fetchCsrfToken();
+  // }, []);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -29,10 +44,9 @@ const AddUser = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token);
-
-      console.log(name, mobile, email);
-      if (!name || !mobile || !email) {
+      const storedCsrfToken = localStorage.getItem("csrfToken");
+      console.log(storedCsrfToken);
+      if (!name || !mobile || !email || !storedCsrfToken) {
         console.log("Please enter all fields");
         return;
       }
@@ -43,13 +57,14 @@ const AddUser = () => {
       formData.append("mobile", mobile);
       formData.append("email", email);
       formData.append("password", password);
-
+      formData.append("csrf_token", storedCsrfToken); // Include CSRF token in form data
       const response = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(formData);
 
       alert(response.data);
       toast.success("New User Added");
