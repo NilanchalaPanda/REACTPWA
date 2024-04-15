@@ -10,7 +10,25 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-    <Toaster />
+    <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success:{
+            duration:3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            backgroundColor: "white",
+            color: "#333",
+          }
+        }}
+      />
   </React.StrictMode>
 );
 
