@@ -5,12 +5,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const AddUser = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [password, setPassword] = useState("");
-  const [csrfToken, setCsrfToken] = useState(""); // Define csrfToken state
-
   // useEffect(() => {
   //   const fetchCsrfToken = async () => {
   //     try {
@@ -51,86 +45,83 @@ const AddUser = () => {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("responses"));
-    setResponses(storedData);
+    setResponses(storedData ? storedData : []);
   }, []);
 
   useEffect(
     function () {
       if (online) {
-        responses.map((response) => submitResponse(response, navigator.onLine));
+        toast.success("You are back online");
+        responses?.map((response) =>
+          submitResponse(response, navigator.onLine)
+        );
         // setResponses([]);
+      }
+      if (!online) {
+        toast.error("You're offline");
+        return;
       }
     },
     [online, responses]
   );
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleMobileChange = (e) => {
-    setMobile(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
   async function submitResponse(response, online) {
-    try{
-         const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
       const storedCsrfToken = localStorage.getItem("csrfToken");
-      console.log(storedCsrfToken);
-      // if (!name || !mobile || !email || !storedCsrfToken) {
-      //   console.log("Please enter all fields");
-      //   return;
-      // }
-
       const url = "http://localhost/REACTPWA/server/add_user.php";
+
+      // Create FormData object
       const formData = new FormData();
       formData.append("name", response.name);
       formData.append("mobile", response.mobile);
       formData.append("email", response.email);
       formData.append("password", response.password);
-      formData.append("csrf_token", storedCsrfToken); 
-    if (!online) {
-      alert("your're offline");
-      return;
-    }
 
-    // const respo = response;
-    let fr;
-    const res = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const output = await res.json();
-    console.log(output);
-    setResponses((responses) => {
-      fr = responses.filter((resp) => {
-        if (resp.Name != response.Name) return resp;
+      // if (!online) {
+      //   toast.error("You're offline");
+      //   toast.loading("Response recorded");
+      //   return;
+      // }
+
+      // Send the form data with fetch
+      const res = await fetch(url, {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Don't need Content-Type header for FormData
+          Authorization: `Bearer ${token}`,
+        },
       });
-      return fr;
-    });
-    localStorage.removeItem("responses");
-  } catch(errors) {
-    console.log(errors)
-  }
+
+      if (res.ok) {
+        const output = await res.text();
+        console.log(output);
+        setResponses((responses) => {
+          const filteredResponses = responses.filter(
+            (resp) => resp.name !== response.name
+          );
+          return filteredResponses;
+        });
+        toast.success("User added sucessfully");
+        localStorage.removeItem("responses");
+      } else {
+        // Handle error response
+        console.error("Failed to add user:", await res.text());
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   async function onSubmit(data) {
     console.log(data);
+
     setResponses((responses) => {
       return [...responses, data];
     });
+    toast.success("Response recorded");
+
     localStorage.setItem("responses", JSON.stringify(responses));
   }
 
@@ -229,7 +220,6 @@ const AddUser = () => {
               type="password"
               placeholder="password"
               className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
-
               {...register("password", {
                 required: true,
                 max: 16,
@@ -243,9 +233,9 @@ const AddUser = () => {
               })}
               aria-invalid={errors["Password"] ? "true" : "false"}
             />
-             {errors["Password"] && (
-          <p role="alert">{errors["Password"]?.message}</p>
-        )}
+            {errors["Password"] && (
+              <p role="alert">{errors["Password"]?.message}</p>
+            )}
             {/* <input
               type="password"
               id="password"

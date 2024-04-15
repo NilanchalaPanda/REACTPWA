@@ -58,8 +58,10 @@ if (!$decodedToken) {
 $userId = $decodedToken->user_id;
 
 // // Log the contents of the POST data to a file
-// $logData = json_encode($_POST) . PHP_EOL;
+// $logDescription = "New User Added: "; // Add your description here
+// $logData = $logDescription . json_encode($_POST) . PHP_EOL;
 // file_put_contents('post_data.log', $logData, FILE_APPEND);
+
 
 // Check if all required fields are present in the request
 if (!isset($_POST['name'], $_POST['mobile'], $_POST['email'], $_POST['password'])) {

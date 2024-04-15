@@ -9,6 +9,7 @@ use \Firebase\JWT\JWT;
 
 require_once 'db_connection.php';
 
+
 if (mysqli_connect_error()) {
     echo mysqli_connect_error();
     exit();
@@ -35,6 +36,17 @@ if (mysqli_connect_error()) {
 
                 // Send CSRF token and JWT token in response
                 echo json_encode(array("csrf_token" => $csrfToken, "token" => $token));
+                
+                // // Log the email address from the POST data to a file
+                // $logDescription = "New User logged in: "; // Add your description here
+
+                // // Extract email from $_POST if it exists
+                // $email = isset($_POST['email']) ? $_POST['email'] : 'No email provided';
+
+                // // Log only the email address
+                // $logData = $logDescription . $email . PHP_EOL;
+                // file_put_contents('post_data.log', $logData, FILE_APPEND);
+
                 exit(); // Exit script after sending tokens
             } else {
                 echo "Incorrect password";
