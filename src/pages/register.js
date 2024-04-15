@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -63,6 +64,8 @@ const Register = () => {
         .catch((error) => alert(error));
 
       alert("Successfully registered");
+      toast.success("Registration Successfull");
+      window.location.href = "/home";
     } catch (err) {
       console.log("ERROR - ", err);
     }
