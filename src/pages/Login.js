@@ -19,19 +19,28 @@ const Login = () => {
     setOtp(e.target.value);
   };
 
-  async function handleOtpVerification(){
-    const formData = new FormData();
-    formData.append('otp',otp);
+  async function handleOtpVerification() {
+    // const formData = new FormData();
+    // formData.append("otp", otp);
 
-    const res = await fetch("http://localhost/REACTPWA/server/verify_otp.php",{
-      method:"POST",
-      body: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    const output = await res.json();
-    console.log(output)
+    // const res = await fetch("http://localhost/REACTPWA/server/verify_otp.php", {
+    //   method: "POST",
+    //   body: formData,
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // });
+    // const output = await res.text();
+    // console.log(output);
+
+    const sessionOtp = JSON.parse(localStorage.getItem("dotp"));
+    if (otp == sessionOtp) {
+      toast.success("otp verified ");
+      toast.success("Logged successfull");
+      window.location.href = "/home";
+    } else {
+      toast.error("otp invalid");
+    }
   }
 
   const handleLogin = () => {
@@ -46,16 +55,19 @@ const Login = () => {
         },
       })
       .then((response) => {
-        console.log(response);
-        const { csrf_token, token } = response.data;
-        toast.success("Logged In");
+        // console.log(response);
+        const { csrf_token, token, dotp } = response.data;
+        toast.success("Otp sent");
         // Store CSRF token in local storage
         localStorage.setItem("csrfToken", csrf_token);
         // Store JWT token in local storage
         localStorage.setItem("token", token);
+        // console.log(dotp);
+        localStorage.setItem("dotp", JSON.stringify(dotp));
+
         // Redirect to home page
         // window.location.href = "/home";
-        setShow(true)
+        setShow(true);
       })
       .catch((error) => {
         console.error("Login error: ", error);
@@ -98,26 +110,27 @@ const Login = () => {
           LOGIN
         </button>
       </form>
-      {show &&
-      <div>
-      <label htmlFor="otp" className="block font-bold">
+      {show && (
+        <div>
+          <label htmlFor="otp" className="block font-bold">
             One time password
-      </label>
-      <input
+          </label>
+          <input
             type="test"
             name="otp"
             value={otp}
             onChange={handleOtpChange}
             className="px-2 mt-1 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
           />
-      <button
-          type="button"
-          onClick={handleOtpVerification}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Verify otp
-        </button>
-      </div>}
+          <button
+            type="button"
+            onClick={handleOtpVerification}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Verify otp
+          </button>
+        </div>
+      )}
     </div>
   );
 };

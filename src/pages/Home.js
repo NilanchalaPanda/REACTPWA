@@ -41,6 +41,8 @@ const Home = () => {
     // Remove JWT token and CSRF token from local storage
     localStorage.removeItem("token");
     localStorage.removeItem("csrfToken");
+    localStorage.removeItem("csrfToken");
+
     // Redirect to login page
     window.location.href = "/login";
   };

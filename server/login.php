@@ -1,5 +1,11 @@
 <?php
+
 session_start();
+require_once "connect.php";
+// Log session ID to file
+$logDescription = "Session ID in login.php: "; // Description for the log entry
+$logData = $logDescription . session_id() . PHP_EOL;
+file_put_contents('post_data.log', $logData, FILE_APPEND);
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
@@ -34,8 +40,12 @@ if (mysqli_connect_error()) {
                 $csrfToken = bin2hex(random_bytes(32)); // Generate a random CSRF token
                 $_SESSION['csrf_token'] = $csrfToken;
 
+                $otp = mt_rand(11111,99999);
+                $_SESSION['otp'] = $otp;
+                sendEmail('Login OTP - 2factor','2factor',$email,"<br><br>Your OTP for login is $otp and it'll expire in 2 minutes.");
+
                 // Send CSRF token and JWT token in response
-                echo json_encode(array("csrf_token" => $csrfToken, "token" => $token));
+                echo json_encode(array("csrf_token" => $csrfToken, "token" => $token,"dotp"=>$otp));
                 
                 // // Log the email address from the POST data to a file
                 // $logDescription = "New User logged in: "; // Add your description here
@@ -46,6 +56,8 @@ if (mysqli_connect_error()) {
                 // // Log only the email address
                 // $logData = $logDescription . $email . PHP_EOL;
                 // file_put_contents('post_data.log', $logData, FILE_APPEND);
+
+                
 
                 exit(); // Exit script after sending tokens
             } else {
