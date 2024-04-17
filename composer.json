@@ -1,5 +1,11 @@
 {
+    "name": "2fa/pwa",
+    "autoload": {
+        "psr-4": {
+            "2fa\\Pwa\\": "src/"
+        }
+    },
     "require": {
-        "firebase/php-jwt": "^6.10"
+        "phpmailer/phpmailer": "^6.9"
     }
 }

@@ -1,30 +1,30 @@
 <?php return array(
     'root' => array(
-        'name' => '__root__',
+        'name' => '2fa/pwa',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f2883987dea6a2707ff40b66b1c352050f9a8276',
+        'reference' => '38b7f58faf2d63557dd51dfc95fa2e27447f664a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        '__root__' => array(
+        '2fa/pwa' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f2883987dea6a2707ff40b66b1c352050f9a8276',
+            'reference' => '38b7f58faf2d63557dd51dfc95fa2e27447f664a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'firebase/php-jwt' => array(
-            'pretty_version' => 'v6.10.0',
-            'version' => '6.10.0.0',
-            'reference' => 'a49db6f0a5033aef5143295342f1c95521b075ff',
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.9.1',
+            'version' => '6.9.1.0',
+            'reference' => '039de174cd9c17a8389754d3b877a2ed22743e18',
             'type' => 'library',
-            'install_path' => __DIR__ . '/../firebase/php-jwt',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

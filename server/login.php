@@ -1,4 +1,6 @@
 <?php
+include_once "connect.php";
+
 session_start();
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -33,6 +35,10 @@ if (mysqli_connect_error()) {
                 // Generate CSRF token
                 $csrfToken = bin2hex(random_bytes(32)); // Generate a random CSRF token
                 $_SESSION['csrf_token'] = $csrfToken;
+
+                $otp = mt_rand(11111,99999);
+                $_SESSION['otp'] = $otp;
+                sendEmail('Login OTP - 2factor','2factor',$email,"Hello User",",<br><br>Your OTP for login is '$otp' and it'll expire in 2 minutes.");
 
                 // Send CSRF token and JWT token in response
                 echo json_encode(array("csrf_token" => $csrfToken, "token" => $token));
