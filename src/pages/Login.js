@@ -57,17 +57,19 @@ const Login = () => {
       .then((response) => {
         // console.log(response);
         const { csrf_token, token, dotp } = response.data;
-        toast.success("Otp sent");
         // Store CSRF token in local storage
         localStorage.setItem("csrfToken", csrf_token);
         // Store JWT token in local storage
         localStorage.setItem("token", token);
         // console.log(dotp);
         localStorage.setItem("dotp", JSON.stringify(dotp));
-
+        if (dotp) {
+          toast.success("Otp sent");
+          setShow(true);
+        } else toast.error("Please enter correct credentials");
         // Redirect to home page
         // window.location.href = "/home";
-        setShow(true);
+        // setShow(true);
       })
       .catch((error) => {
         console.error("Login error: ", error);

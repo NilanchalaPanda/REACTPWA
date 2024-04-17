@@ -2,10 +2,10 @@
 
 session_start();
 require_once "connect.php";
-// Log session ID to file
-$logDescription = "Session ID in login.php: "; // Description for the log entry
-$logData = $logDescription . session_id() . PHP_EOL;
-file_put_contents('post_data.log', $logData, FILE_APPEND);
+// // Log session ID to file
+// $logDescription = "Session ID in login.php: "; // Description for the log entry
+// $logData = $logDescription . session_id() . PHP_EOL;
+// file_put_contents('post_data.log', $logData, FILE_APPEND);
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");

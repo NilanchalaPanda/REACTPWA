@@ -10,9 +10,9 @@ const Home = () => {
       try {
         // Retrieve token from local storage
         const token = localStorage.getItem("token");
-        console.log("Token:", token);
+        // console.log("Token:", token);
         const csrfToken = localStorage.getItem("csrfToken");
-        console.log("CSRF Token:", csrfToken);
+        // console.log("CSRF Token:", csrfToken);
 
         // Make request to server to get user data
         const response = await axios.get(
@@ -25,7 +25,7 @@ const Home = () => {
           }
         );
 
-        console.log("Response:", response);
+        // console.log("Response:", response);
         setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user data: ", error);
@@ -35,7 +35,7 @@ const Home = () => {
     fetchData();
   }, []);
 
-  console.log("UserData:", userData);
+  // console.log("UserData:", userData);
 
   const handleLogout = () => {
     // Remove JWT token and CSRF token from local storage
