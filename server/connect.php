@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 // session_start();
 // include_once "../vendor/phpmailer/phpmailer/src/class.phpmailer.php";
 
-$conn = new mysqli("localhost", "root", "Pranav@01", "pwa");
+require_once 'db_connection.php';
 
 function sendEmail($subject, $from_name, $email, $content) {
     $mail = new PHPMailer();
