@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  
+  const navigate = useNavigate();
   const [nav, setNav] = useState(false);
 
   const handleNav = () => {
@@ -11,9 +14,9 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     toast.success("Logout successfully");
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   const navItems = [

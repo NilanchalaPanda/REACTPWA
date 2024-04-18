@@ -11,8 +11,6 @@ const Home = () => {
         // Retrieve token from local storage
         const token = localStorage.getItem("token");
         // console.log("Token:", token);
-        const csrfToken = localStorage.getItem("csrfToken");
-        // console.log("CSRF Token:", csrfToken);
 
         // Make request to server to get user data
         const response = await axios.get(
@@ -34,19 +32,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
-  // console.log("UserData:", userData);
-
-  const handleLogout = () => {
-    // Remove JWT token and CSRF token from local storage
-    localStorage.removeItem("token");
-    localStorage.removeItem("csrfToken");
-    localStorage.removeItem("csrfToken");
-
-    // Redirect to login page
-    window.location.href = "/login";
-  };
-
   return (
     <>
       <Navbar />
@@ -57,12 +42,6 @@ const Home = () => {
           </h1>
           <p>Email: {userData.email}</p>
           <p>Mobile: {userData.mobile}</p>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-          >
-            Logout
-          </button>
         </div>
       )}
     </>

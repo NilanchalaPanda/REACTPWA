@@ -171,7 +171,7 @@ const AddUser = () => {
             </label>
             <input
               type="text"
-              placeholder="name"
+              placeholder="Name"
               className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
               {...register("name", {
                 required: true,
@@ -179,8 +179,13 @@ const AddUser = () => {
                 min: 3,
                 pattern: /^[a-zA-Z]+$/i,
               })}
-              aria-invalid={errors["Name"] ? "true" : "false"}
+              aria-invalid={errors["name"] ? "true" : "false"}
             />
+            {errors["name"] && (
+              <p className="text-red-600 font-semibold mt-1 text-sm font-mono">
+                Name with no space
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="email" className="block font-bold">
@@ -188,37 +193,53 @@ const AddUser = () => {
             </label>
             <input
               type="email"
-              placeholder="email"
+              placeholder="Email ID"
               className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
               {...register("email", {
                 required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
               })}
             />
+            {errors.email && (
+              <p className="text-red-600 font-semibold mt-1 text-sm font-mono">
+                {errors.email.message}
+              </p>
+            )}
           </div>
+
           <div className="mb-4">
             <label htmlFor="mobile" className="block font-bold">
               Mobile:
             </label>
             <input
               type="text"
-              placeholder="mobile"
+              placeholder="Mobile Number"
               className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
-              {...register("mobile", { required: true })}
+              {...register("mobile", {
+                required: true,
+                pattern: {
+                  value: /^[0-9]{10}$/, // Regular expression to match exactly 10 digits
+                  message: "Mobile number must be exactly 10 digits long",
+                },
+              })}
             />
-            {/* <input
-              type="text"
-              id="mobile"
-              value={mobile}
-              onChange={handleMobileChange}
-            /> */}
+            {errors.mobile && (
+              <p className="text-red-600 font-semibold mt-1 text-sm font-mono">
+                {errors.mobile.message}
+              </p>
+            )}
           </div>
+
           <div className="mb-4">
             <label htmlFor="password" className="block font-bold">
               Password:
             </label>
             <input
               type="password"
-              placeholder="password"
+              placeholder="Password"
               className="px-2 focus:outline-none focus:ring focus:ring-blue-300 block w-full h-10 rounded-md border-2 border-gray-300"
               {...register("password", {
                 required: true,
@@ -228,20 +249,20 @@ const AddUser = () => {
                   value:
                     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
                   message:
-                    "Password should be atleast 8 characters, it should contain one uppercase and a special character",
+                    "Password should be atleast 8 to 16 characters, one uppercase letter, one lowercase letter, one number and a special character (@$!%*?&)",
                 },
               })}
-              aria-invalid={errors["Password"] ? "true" : "false"}
+              aria-invalid={errors["password"] ? "true" : "false"}
             />
-            {errors["Password"] && (
-              <p role="alert">{errors["Password"]?.message}</p>
+            {errors["password"] && (
+              <p
+                className="text-red-600 font-semibold mt-1 text-sm font-mono"
+                role="alert"
+              >
+                {errors.password?.message}
+              </p>
             )}
-            {/* <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-            /> */}
+            {/* {errors.password && <p role="alert">{errors.password?.message}</p>} */}
           </div>
           <button
             type="submit"

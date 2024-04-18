@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -20,64 +25,115 @@ const Login = () => {
   };
 
   async function handleOtpVerification() {
-    // const formData = new FormData();
-    // formData.append("otp", otp);
+    const formData = new FormData();
+    formData.append("otp", otp);
 
-    // const res = await fetch("http://localhost/REACTPWA/server/verify_otp.php", {
-    //   method: "POST",
-    //   body: formData,
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
-    // const output = await res.text();
-    // console.log(output);
+    try {
+      const response = await axios.post(
+        "http://localhost/REACTPWA/server/login.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    const sessionOtp = JSON.parse(localStorage.getItem("dotp"));
-    if (otp == sessionOtp) {
-      toast.success("otp verified ");
-      toast.success("Logged successfull");
-      window.location.href = "/home";
-    } else {
-      toast.error("otp invalid");
+      console.log("handleOtpVerification : ", response);
+
+      if (!response.data.success) {
+        return toast.error(response.data.message);
+      } else {
+        navigate("/home");
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.error("Login error: ", error);
     }
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const formData = new FormData();
     formData.append("email", email);
     formData.append("password", password);
 
-    axios
-      .post("http://localhost/REACTPWA/server/login.php", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        const { csrf_token, token, dotp } = response.data;
-        // Store CSRF token in local storage
-        localStorage.setItem("csrfToken", csrf_token);
-        // Store JWT token in local storage
-        localStorage.setItem("token", token);
-        // console.log(dotp);
-        localStorage.setItem("dotp", JSON.stringify(dotp));
-        if (dotp) {
-          toast.success("Otp sent");
-          setShow(true);
-        } else toast.error("Please enter correct credentials");
-        // Redirect to home page
-        // window.location.href = "/home";
-        // setShow(true);
-      })
-      .catch((error) => {
-        console.error("Login error: ", error);
-      });
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost/REACTPWA/server/login.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response);
+
+      if (!response.data.success) {
+        return toast.error(`${response.data.message}`);
+      }
+
+      const { csrf_token, token } = response.data;
+
+      isLoading && toast("Loading...");
+      setIsLoading(false);
+
+      localStorage.setItem("csrfToken", csrf_token);
+      localStorage.setItem("token", token);
+
+      if (response.data.success) {
+        toast.success("OTP Sent");
+        setShow(true);
+      } else {
+        toast.error("Please enter correct credentials");
+      }
+    } catch (error) {
+      console.error("Login error: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    try {
+      const response = await axios.post(
+        "http://localhost/REACTPWA/server/login.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (!response.data.success) {
+        return toast.error("Network response was not ok");
+      }
+
+      const { csrf_token, token } = response.data;
+
+      localStorage.setItem("csrfToken", csrf_token);
+      localStorage.setItem("token", token);
+      if (response.data.success) {
+        toast.success("OTP Sent");
+        setShow(true);
+      } else {
+        toast.error("Please enter correct credentials");
+      }
+    } catch (error) {
+      console.error("Login error: ", error);
+    }
   };
 
   return (
-    <div className="flex flex-col px-3 md:px-52 mt-6 h-screen">
+    <div className="flex flex-col px-3 md:px-52 mt-6 h-screen relative">
       <h1 className="text-3xl font-normal mb-4">Login</h1>
       <form>
         <div className="mb-4">
@@ -112,8 +168,16 @@ const Login = () => {
           LOGIN
         </button>
       </form>
+
+      {isLoading && (
+        <div className="flex justify-center items-center gap-x-2">
+          <PulseLoader size={10} color="blue" />
+          <span className="text-bold">Loading OTP...</span>
+        </div>
+      )}
+
       {show && (
-        <div>
+        <div className="mt-8">
           <label htmlFor="otp" className="block font-bold">
             One time password
           </label>
@@ -127,10 +191,16 @@ const Login = () => {
           <button
             type="button"
             onClick={handleOtpVerification}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Verify otp
           </button>
+          <span
+            onClick={handleResend}
+            className="ml-4 underline text-black cursor-pointer hover:text-blue-500"
+          >
+            Resend
+          </span>
         </div>
       )}
     </div>
