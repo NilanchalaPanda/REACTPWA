@@ -2,6 +2,8 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+header('Access-Control-Allow-Credentials: true');
+
 // session_start();
 // include_once "../vendor/phpmailer/phpmailer/src/class.phpmailer.php";
 

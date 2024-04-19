@@ -1,6 +1,10 @@
 <?php
 
+ini_set("session.cookie_domain", '.localhost');
+session_set_cookie_params(3600, '/', '.localhost', true, true);
+
 session_start();
+
 require_once "connect.php";
 // // Log session ID to file
 // $logDescription = "Session ID in login.php: "; // Description for the log entry
@@ -9,13 +13,12 @@ require_once "connect.php";
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: POST");
+header('Access-Control-Allow-Credentials: true');
 
 require_once('../vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
 require_once 'db_connection.php';
-
-
 
 if (mysqli_connect_error()) {
     echo mysqli_connect_error();
@@ -37,17 +40,18 @@ if (mysqli_connect_error()) {
             if (password_verify($password, $user['password'])) {
                 // Password is correct, generate JWT token
                 $token = generateJWT($user['id']); // Assuming 'id' is the unique identifier for the user
-
+                
                 // Generate CSRF token
                 $csrfToken = bin2hex(random_bytes(32)); // Generate a random CSRF token
                 $_SESSION['csrf_token'] = $csrfToken;
-
+                
                 $otp = mt_rand(11111,99999);
                 $_SESSION['otp'] = $otp;
                 sendEmail('Login OTP - 2 factor authentication','2factor',$email,"<br><br>Your OTP for login is $otp and it'll expire in 2 minutes.");
+                
 
                 // Send CSRF token and JWT token in response
-                echo json_encode(array("success" => true, "message" => "Details fetched", "csrf_token" => $csrfToken, "token" => $token,"dotp"=>$otp));
+                echo json_encode(array("success" => true, "message" => "Details fetched", "csrf_token" => $csrfToken, "token" => $token,"dotp"=>$otp, "session ID" => session_id(), "sessionData" => $_SESSION));
                 
                 // // Log the email address from the POST data to a file
                 // $logDescription = "New User logged in: "; // Add your description here
@@ -69,11 +73,11 @@ if (mysqli_connect_error()) {
             exit();
         }
     } else if($inputOTP){
-        if(isset($_SESSION['otp']) && $_SESSION['otp'] == $inputOTP) {
-            echo json_encode(array("success" => true, "message" => "OTP verified"));
+        if(isset($_SESSION['otp']) &&  $_SESSION['otp'] == $inputOTP) {
+            echo json_encode(array("success" => true, "message" => "OTP verified", "session ID" => session_id() ? session_id() : "No session ID", "sessionData" => $_SESSION ? $_SESSION : "No session data"));
         }
         else {
-            echo json_encode(array("success" => false, "message" => "Incorrect OTP"));
+            echo json_encode(array("success" => false, "message" => "Incorrect OTP", "session ID" => session_id() ? session_id() : "No session ID", "sessionData" => $_SESSION ? $_SESSION : "No session data"));
         }
     }
     else{    

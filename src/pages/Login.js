@@ -36,10 +36,11 @@ const Login = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true, // Enable sending cookies
         }
       );
 
-      console.log("handleOtpVerification : ", response);
+      console.log("handleOtpVerification : ", response.data);
 
       if (!response.data.success) {
         return toast.error(response.data.message);
@@ -67,10 +68,11 @@ const Login = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true, // Enable sending cookies
         }
       );
 
-      console.log(response);
+      console.log(response.data);
 
       if (!response.data.success) {
         return toast.error(`${response.data.message}`);
@@ -110,6 +112,7 @@ const Login = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true, // Enable sending cookies
         }
       );
 
