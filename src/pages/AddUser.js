@@ -77,7 +77,7 @@ const AddUser = () => {
       formData.append("mobile", response.mobile);
       formData.append("email", response.email);
       formData.append("password", response.password);
-
+      formData.append("csrf_token", storedCsrfToken); 
       // if (!online) {
       //   toast.error("You're offline");
       //   toast.loading("Response recorded");
@@ -92,24 +92,28 @@ const AddUser = () => {
           // Don't need Content-Type header for FormData
           Authorization: `Bearer ${token}`,
         },
+        credentials: "include", // Enable sending cookies
       });
 
+      const outPut = await res.text();
+      const output = JSON.parse(outPut);
       if (res.ok) {
-        const output = await res.text();
-        console.log(output);
+        // console.log(output);
         setResponses((responses) => {
           const filteredResponses = responses.filter(
             (resp) => resp.name !== response.name
           );
           return filteredResponses;
         });
-        toast.success("User added sucessfully");
+        toast.success(output.message);
         localStorage.removeItem("responses");
       } else {
         // Handle error response
-        console.error("Failed to add user:", await res.text());
+        toast.success(output.message);
+        // console.error("Failed to add user:", await res.text());
       }
     } catch (error) {
+      toast.success("Error occcured");
       console.error("Error:", error);
     }
   }

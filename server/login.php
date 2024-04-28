@@ -81,7 +81,7 @@ if (mysqli_connect_error()) {
         }
     }
     else{    
-        echo "Missing required fields";
+        echo json_encode(array("success" => false, "message" => "All fields are required"));
     }
 
     $conn->close();

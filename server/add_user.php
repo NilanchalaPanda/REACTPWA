@@ -1,12 +1,20 @@
 <?php
+
+ini_set("session.cookie_domain", '.localhost');
+session_set_cookie_params(3600, '/', '.localhost', true, true);
+
+session_start();
+
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Authorization, Content-Type");
 header("Access-Control-Allow-Methods: POST");
+header('Access-Control-Allow-Credentials: true');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("Access-Control-Allow-Origin: http://localhost:3000");
     header("Access-Control-Allow-Headers: Authorization, Content-Type");
     header("Access-Control-Allow-Methods: POST");
+    header('Access-Control-Allow-Credentials: true');
     exit();
 }
 
@@ -14,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once 'db_connection.php';
 
 if (mysqli_connect_error()) {
-    echo json_encode(array("message" => "Database connection failed"));
+    echo json_encode(array("success" => false, "message" => "Database connection failed"));
     exit();
 }
 
@@ -25,7 +33,7 @@ if (isset($headers['Authorization'])) {
     $token = $headers['Authorization'];
 } else {
     http_response_code(401);
-    echo "Unauthorized";
+    echo json_encode(array("success" => false, "message" => "Unauthorized"));
     exit();
 }
 
@@ -50,13 +58,12 @@ $decodedToken = verifyJWT(str_replace("Bearer ", "", $token));
 
 if (!$decodedToken) {
     http_response_code(401);
-    echo "Unauthorized Access";
+    echo json_encode(array("success" => false, "message" => "Unauthorized access"));
     exit();
 }
 
 // Token is valid, retrieve user data
 $userId = $decodedToken->user_id;
-
 
 // // Log the contents of the POST data to a file
 // $logDescription = "New User Added: "; // Add your description here
@@ -73,7 +80,7 @@ $userId = $decodedToken->user_id;
 // Check if all required fields are present in the request
 if (!isset($_POST['name'], $_POST['mobile'], $_POST['email'], $_POST['password'])) {
     http_response_code(400);
-    echo "Missing required fields";
+    echo json_encode(array("success" => false, "message" => "All fields are required"));
     exit();
 }
 
@@ -81,6 +88,15 @@ $name = $_POST['name'];
 $mobile = $_POST['mobile'];
 $email = $_POST['email'];
 $password = $_POST['password'];
+$csrfToken = $_POST['csrf_token'];
+
+// CSRF token validation
+$csrfTokenSession = isset($_SESSION['csrf_token']) ? $_SESSION['csrf_token'] : '';
+if (!isset($_SESSION['csrf_token']) || $csrfToken !== $_SESSION['csrf_token']) {
+    echo json_encode(array("success" => false, "message" => "CSRF token validation failed"));
+    exit();
+}
+
 
 // Hash the password before storing it
 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -92,10 +108,10 @@ $stmt->bind_param("ssss", $name, $mobile, $email, $hashedPassword);
 
 if ($stmt->execute()) {
     http_response_code(201);
-    echo "User added successfully";
+    echo json_encode(array("success" => true, "message" => "User added successfully"));
 } else {
     http_response_code(500);
-    echo "Failed to add user";
+    echo json_encode(array("success" => false, "message" => "Failed to add user"));
 }
 
 // Close database connection
