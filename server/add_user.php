@@ -64,7 +64,7 @@ if (!$decodedToken) {
 
 // Token is valid, retrieve user data
 $userId = $decodedToken->user_id;
-
+////////Logging the contents 
 // // Log the contents of the POST data to a file
 // $logDescription = "New User Added: "; // Add your description here
 
