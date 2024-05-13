@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
+import { Cookies } from "react-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ const Login = () => {
   const [otp, setOtp] = useState("");
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  //eslint-disable-next-line
+  const cookies = new Cookies();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -79,6 +83,7 @@ const Login = () => {
       }
 
       const { csrf_token, token } = response.data;
+      cookies.set("myCookie", csrf_token, { path: "/" });
 
       isLoading && toast("Loading...");
       setIsLoading(false);

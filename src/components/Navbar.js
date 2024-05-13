@@ -3,8 +3,10 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Cookies } from "react-cookie";
 
 const Navbar = () => {
+  const cookies = new Cookies();
   
   const navigate = useNavigate();
   const [nav, setNav] = useState(false);
@@ -16,6 +18,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.clear();
     toast.success("Logout successfully");
+    cookies.remove('myCookie', { path: '/' });
     navigate("/login");
   };
 
