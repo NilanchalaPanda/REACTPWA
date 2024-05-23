@@ -19,8 +19,8 @@ function sendEmail($subject, $from_name, $email, $content) {
     $client = ""; // Assuming $client is defined somewhere else
     if ($client == "" || $client == "gmail") {
         $mail->Host = "smtp.gmail.com";
-        $mail->Username = "mulamatharva43@gmail.com";
-        $mail->Password = "tiboiecgorfpvszj";
+        $mail->Username = "Enter your gmail here";
+        $mail->Password = "Enter your unique token from App passwords in manage google account";
         $mail->Port = 587;
         $mail->setFrom('mulamatharva43@gmail.com', $from_name);
     }
