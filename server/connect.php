@@ -22,7 +22,7 @@ function sendEmail($subject, $from_name, $email, $content) {
         $mail->Username = "Enter your gmail here";
         $mail->Password = "Enter your unique token from App passwords in manage google account";
         $mail->Port = 587;
-        $mail->setFrom('mulamatharva43@gmail.com', $from_name);
+        $mail->setFrom('Enter your gmail here', $from_name);
     }
     
     // Check if $email is an array
